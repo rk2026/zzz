@@ -12,7 +12,7 @@ Import Necessory Library
 import streamlit as st
 import numpy as np
 import pandas as pd
-from google.colab import files
+
 
 """#Hardcode of constant value"""
 
