@@ -5,10 +5,10 @@ import pandas as pd
 import numpy as np
 
 def main():
-    st.title("CSV File Uploader")
+    st.title("इन्भेन्टोरी क्यालकुलेटर")
 
     # File uploader
-    uploaded_file = st.file_uploader("Choose a CSV file", type="csv")
+    uploaded_file = st.file_uploader("निर्दिष्ठ प्रकारको रूखको तथ्याँङ्क तालीका .csv फर्म्याटको अपलोड गर्नुहोस।", type="csv")
 
     if uploaded_file is not None:
         # Read the CSV file
@@ -82,7 +82,7 @@ def main():
         result_df = result_df.drop(columns=columns_to_drop)
 
         # Display the updated dataframe
-        st.write("Dataframe with New Column and Multiplication:")
+        st.write("तलको विश्लेषण तालीका excel csv को रूपमा डाउनलोड गर्नुहोस:")
         st.dataframe(result_df)
 
 if __name__ == "__main__":
