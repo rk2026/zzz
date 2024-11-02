@@ -53,9 +53,9 @@ def main():
                            'Hill spp', '', '']
         }
 
-        if 'lat' in df.columns and 'long' in df.columns:
+        if 'LATITUDE' in df.columns and 'LONGITUDE' in df.columns:
             st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
-            st.map(df[['lat', 'long']])  # Display map with points
+            st.map(df[['LATITUDE', 'LONGITUDE']])  # Display map with points
 
         sppVal = pd.DataFrame(data)
 
