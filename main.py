@@ -87,8 +87,8 @@ columns_to_drop = ['SN', 'scientific_name', 'a', 'b', 'c', 'a1', 'b1', 's', 'm',
 result_df = result_df.drop(columns=columns_to_drop)
 
 # Display the updated dataframe
-        st.write("Dataframe with New Column and Multiplication:")
-        st.dataframe(df)
+st.write("Dataframe with New Column and Multiplication:")
+st.dataframe(df)
 
 
         
