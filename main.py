@@ -5,7 +5,7 @@ import pandas as pd
 import numpy as np
 
 def main():
-    st.title("इन्भेन्टोरी क्यालकुलेटर")
+    st.title("ट्री भोलुम क्यालकुलेटर (TVC 1.0)")
 
     # File uploader
     uploaded_file = st.file_uploader("निर्दिष्ठ प्रकारको रूखको तथ्याँङ्क तालीका .csv फर्म्याटको अपलोड गर्नुहोस।", type="csv")
