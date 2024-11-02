@@ -54,10 +54,6 @@ data = {
 
 sppVal = pd.DataFrame(data)
 
-# Join the GeoDataFrames based on the 'species' column
-merged_gdf = df_with_remarks.merge(sppVal, left_on='species', right_on='Scientific Name')
-"""
-
 joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
 
 '''copy the joined_df as 'result_df'''
