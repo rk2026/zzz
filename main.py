@@ -60,7 +60,7 @@ def main():
         # Copy the joined_df as 'result_df'
         result_df = joined_df.copy()
 
-        """## Function to perform calculations and add new columns"""
+        """ यो एप्लिकेसन वन तथा वातावरण मंत्रालयको गाइडलाइन अनुसार तयार गरीएको छ। सावधानी अपनाएर मात्र प्रयोग गर्नुहोस। """
         def add_calculated_columns(df):
             df['stem_volume'] = np.exp(df['a'] + df['b'] * np.log(df['dia_cm']) + df['c'] * np.log(df['height_m'])) / 1000
             df['branch_ratio'] = df['dia_cm'].apply(lambda x: 0.1 if x < 10 else 0.2)
@@ -75,7 +75,7 @@ def main():
             df['firewood_chatta'] = df['firewood_m3'] * 0.105944
             return df
 
-        """Apply the function to the dataframe"""
+        
         result_df = add_calculated_columns(df=result_df)
 
         columns_to_drop = ['SN', 'scientific_name', 'a', 'b', 'c', 'a1', 'b1', 's', 'm', 'bg']
