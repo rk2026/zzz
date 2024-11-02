@@ -53,6 +53,10 @@ def main():
                            'Hill spp', '', '']
         }
 
+        if 'Y' in df.columns and 'X' in df.columns:
+            st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
+            st.map(df[['Y', 'X']])  # Display map with points
+
         sppVal = pd.DataFrame(data)
 
         joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
