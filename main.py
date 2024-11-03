@@ -105,7 +105,7 @@ def main():
             data=df,
             get_position='[LONGITUDE, LATITUDE]',
             get_color='[200, 30, 0, 160]',
-            get_radius=1000,
+            get_radius=10,
             pickable=True
         )
 
