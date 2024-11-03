@@ -34,8 +34,8 @@ def main():
     tdf = pd.DataFrame(tdata)
 
     # Display the DataFrame in Streamlit
-    st.write("Tree Data:")
-    st.dataframe(tdf)
+    st.write("यो टेम्पेलट डाटा डाउनलोड गरी यही अनुसार हुनेगरी डाटा तयार गर्नुहोस, कृपया यस टेवलको कोलम हेडिङ्को नाम परिवर्तन नगर्नुहोस।(Download this templete to fill the data. Do not alter the column heading name)")
+    st.dataframe(tdf.hide_index())
 
     # Download button
     @st.cache_data
@@ -44,7 +44,7 @@ def main():
 
     csv_data = convert_df_to_csv(tdf)
     st.download_button(
-        label="Download Data as CSV",
+        label="Download Data as templete CSV",
         data=csv_data,
         file_name='tree_data_template.csv',
         mime='text/csv'
