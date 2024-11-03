@@ -100,7 +100,7 @@ def main():
         if 'LATITUDE' in df.columns and 'LONGITUDE' in df.columns:
             st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
             st.map(df[['LATITUDE', 'LONGITUDE']])  # Display map with points
-#point costumization
+#start point costumization
     # Define a pydeck Layer
     layer = pdk.Layer(
         'ScatterplotLayer',                 # Scatterplot layer for points
@@ -111,7 +111,7 @@ def main():
         pickable=True                       # Enable clicking on points
     )
 
-
+# end point costumization
 
 
 
@@ -130,12 +130,10 @@ def main():
 
         
 
-        sppVal = pd.DataFrame(data)
-
-        joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
-
-        # Copy the joined_df as 'result_df'
-        result_df = joined_df.copy()
+sppVal = pd.DataFrame(data)
+joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
+# Copy the joined_df as 'result_df'
+result_df = joined_df.copy()
 
         """ यो एप्लिकेसन वन तथा वातावरण मंत्रालयको गाइडलाइन अनुसार तयार गरीएको छ। सावधानी अपनाएर मात्र प्रयोग गर्नुहोस। """
         def add_calculated_columns(df):
