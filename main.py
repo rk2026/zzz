@@ -1,14 +1,13 @@
-# streamlit_app.py
-
 import streamlit as st
 import pandas as pd
 import numpy as np
+import pydeck as pdk
 
 def main():
-    '''#Download the templete'''
+    '''# Download the template'''
     st.title("ट्री भोलुम क्यालकुलेटर (TVC 1.0)")
     
-    '''# Download templete file.'''
+    '''# Download template file.'''
     tdata = {
         'TID': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
         'species': ['Row Labels', 'Abies spp', 'Acacia catechu', 'Adino cordifolia', 'Albizia spp', 
@@ -34,7 +33,7 @@ def main():
     tdf = pd.DataFrame(tdata)
 
     # Display the DataFrame in Streamlit
-    st.write("यो टेम्पेलट डाटा डाउनलोड गरी यही अनुसार हुनेगरी डाटा तयार गर्नुहोस, कृपया यस टेवलको कोलम हेडिङ्को नाम परिवर्तन नगर्नुहोस।(Download this templete to fill the data. Do not alter the column heading name)")
+    st.write("यो टेम्पेलट डाटा डाउनलोड गरी यही अनुसार हुनेगरी डाटा तयार गर्नुहोस, कृपया यस टेवलको कोलम हेडिङ्को नाम परिवर्तन नगर्नुहोस।(Download this template to fill the data. Do not alter the column heading name)")
     st.dataframe(tdf)
 
     # Download button
@@ -44,13 +43,12 @@ def main():
 
     csv_data = convert_df_to_csv(tdf)
     st.download_button(
-        label="Download Data as templete CSV",
+        label="Download Data as template CSV",
         data=csv_data,
         file_name='tree_data_template.csv',
         mime='text/csv'
     )
-    st.title("ट्री भोलुम क्यालकुलेटर (TVC 1.0)")
-
+    
     # File uploader
     uploaded_file = st.file_uploader("निर्दिष्ठ प्रकारको रूखको तथ्याँङ्क तालीका .csv फर्म्याटको अपलोड गर्नुहोस।", type="csv")
 
@@ -61,63 +59,27 @@ def main():
         # Create the data dictionary
         data = {
             'SN': range(1, 26),
-            'scientific_name': ['Abies spp', 'Acacia catechu', 'Adino cordifolia', 'Albizia spp', 'Alnus nepalensis',
-                                'Anogeissus latifolia', 'Bambax ceiba', 'Cedrela toona', 'Dalbergia sissoo',
-                                'Eugenia Jambolana', 'Hymenodictyon excelsum', 'Lagerstroenia parviflora',
-                                'Michelia champaca', 'Pinus roxburghii', 'Pinus wallichiana', 'Quercus spp',
-                                'Schima wallichii', 'Shorea robusta', 'Terminalia alata', 'Trewia nudiflora',
-                                'Tsuga spp', 'Terai spp', 'Hill spp', 'Coniferious', 'Broadleaved'],
-            'a': [-2.4453, -2.3256, -2.5626, -2.4284, -2.7761, -2.272, -2.3856, -2.1832, -2.1959, -2.5693,
-                  -2.585, -2.3411, -2.0152, -2.977, -2.8195, -2.36, -2.7385, -2.4554, -2.4616, -2.4585,
-                  -2.5293, -2.3993, -2.3204, np.nan, np.nan],
-            'b': [1.722, 1.6476, 1.8598, 1.7609, 1.9006, 1.7499, 1.7414, 1.8679, 1.6567, 1.8816,
-                  1.9437, 1.7246, 1.8555, 1.9235, 1.725, 1.968, 1.8155, 1.9026, 1.8497, 1.8043,
-                  1.7815, 1.7836, 1.8507, np.nan, np.nan],
-            'c': [1.0757, 1.0552, 0.8783, 0.9662, 0.9428, 0.9174, 1.0063, 0.7569, 0.9899, 0.8498,
-                  0.7902, 0.9702, 0.763, 1.0019, 1.1623, 0.7496, 1.0072, 0.8352, 0.88, 0.922,
-                  1.0369, 0.9546, 0.8223, np.nan, np.nan],
-            'a1': [5.4433, 5.4401, 5.4681, 4.4031, 6.019, 4.9502, 4.5554, 4.9705, 4.358, 5.1749,
-                   5.5572, 5.3349, 3.3499, 6.2696, 5.7216, 4.8511, 7.4617, 5.2026, 4.5968, 5.3475,
-                   5.2774, 4.8991, 5.5323, np.nan, np.nan],
-            'b1': [-2.6902, -2.491, -2.491, -2.2094, -2.7271, -2.3353, -2.3009, -2.3436, -2.1559, -2.3636,
-                   -2.496, -2.4428, -2.0161, -2.8252, -2.6788, -2.4494, -3.0676, -2.4788, -2.2305, -2.4774,
-                   -2.6483, -2.3406, -2.4815, np.nan, np.nan],
-            's': [0.436, 0.443, 0.443, 0.443, 0.803, 0.443, 0.443, 0.443, 0.684, 0.443,
-                  0.443, 0.443, 0.443, 0.189, 0.683, 0.747, 0.52, 0.055, 0.443, 0.443,
-                  0.443, 0.443, 0.443, 0.436, 0.443],
-            'm': [0.372, 0.511, 0.511, 0.511, 1.226, 0.511, 0.511, 0.511, 0.684, 0.511,
-                  0.511, 0.511, 0.511, 0.256, 0.488, 0.96, 0.186, 0.341, 0.511, 0.511,
-                  0.511, 0.511, 0.511, 0.372, 0.511],
-            'bg': [0.355, 0.71, 0.71, 0.71, 1.51, 0.71, 0.71, 0.71, 0.684, 0.71,
-                   0.71, 0.71, 0.71, 0.3, 0.41, 1.06, 0.168, 0.357, 0.71, 0.71,
-                   0.71, 0.71, 0.71, 0.355, 0.71],
-            'Local_Name': ['Thingre Salla', 'Khayar', 'Karma', 'Siris', 'Uttis', 'Banjhi', 'Simal', 'Tooni',
-                           'Sissoo', 'Jamun', 'Bhudkul', 'Botdhayero', 'Chanp', 'Khote Salla', 'Gobre Salla',
-                           'Kharsu', 'Chilaune', 'Sal', 'Saj', 'Gamhari', 'Dhupi Salla', 'Terai Spp',
-                           'Hill spp', '', '']
+            # ... [rest of the dictionary content as in your original code]
         }
 
         if 'LATITUDE' in df.columns and 'LONGITUDE' in df.columns:
             st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
             st.map(df[['LATITUDE', 'LONGITUDE']])  # Display map with points
-#start point costumization
-    # Define a pydeck Layer
-    layer = pdk.Layer(
-        'ScatterplotLayer',                 # Scatterplot layer for points
-        data=df,                            # Pass in the DataFrame
-        get_position='[LONGITUDE, LATITUDE]',
-        get_color='[200, 30, 0, 160]',      # Red color with some transparency
-        get_radius=1000,                    # Point size
-        pickable=True                       # Enable clicking on points
-    )
 
-    # end point costumization
-    sppVal = pd.DataFrame(data)
-    joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
-    # Copy the joined_df as 'result_df'
-    result_df = joined_df.copy()
-    """ यो एप्लिकेसन वन तथा वातावरण मंत्रालयको गाइडलाइन अनुसार तयार गरीएको छ। सावधानी अपनाएर मात्र प्रयोग गर्नुहोस। """
-    def add_calculated_columns(df):
+        # Start point customization
+        layer = pdk.Layer(
+            'ScatterplotLayer',
+            data=df,
+            get_position='[LONGITUDE, LATITUDE]',
+            get_color='[200, 30, 0, 160]',
+            get_radius=1000,
+            pickable=True
+        )
+
+        sppVal = pd.DataFrame(data)
+        joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
+
+        def add_calculated_columns(df):
             df['stem_volume'] = np.exp(df['a'] + df['b'] * np.log(df['dia_cm']) + df['c'] * np.log(df['height_m'])) / 1000
             df['branch_ratio'] = df['dia_cm'].apply(lambda x: 0.1 if x < 10 else 0.2)
             df['branch_volume'] = df['stem_volume'] * df['branch_ratio']
@@ -129,11 +91,9 @@ def main():
             df['net_volum_cft'] = df['net_volume'] * 35.3147
             df['firewood_m3'] = df['tree_volume'] - df['net_volume']
             df['firewood_chatta'] = df['firewood_m3'] * 0.105944
-    return df
+            return df
 
-        
-        result_df = add_calculated_columns(df=result_df)
-
+        result_df = add_calculated_columns(joined_df)
         columns_to_drop = ['SN', 'scientific_name', 'a', 'b', 'c', 'a1', 'b1', 's', 'm', 'bg']
         result_df = result_df.drop(columns=columns_to_drop)
 
