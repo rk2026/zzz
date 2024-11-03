@@ -6,7 +6,47 @@ import numpy as np
 
 def main():
     st.title("ट्री भोलुम क्यालकुलेटर (TVC 1.0)")
+# Define the downloading data as a user template.
+data = {
+    'TID': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+    'species': ['Row Labels', 'Abies spp', 'Acacia catechu', 'Adino cordifolia', 'Albizia spp', 
+                'Alnus nepalensis', 'Anogeissus latifolia', 'Bambax ceiba', 'Cedrela toona', 
+                'Dalbergia sissoo', 'Eugenia Jambolana', 'Hill spp', 'Hymenodictyon excelsum', 
+                'Lagerstroenia parviflora', 'Michelia champaca', 'Pinus roxburghii', 
+                'Pinus wallichiana', 'Quercus spp', 'Schima wallichii', 'Shorea robusta', 
+                'Terai spp', 'Terminalia alata', 'Trewia nudiflora', 'Tsuga spp'],
+    'LONGITUDE': [85.3541391, 85.3561959, 85.3522515, 85.3534736, 85.3538313, 85.3531329, 85.3510125, 
+                  85.3530499, 85.3564367, 85.3538324, 85.3501465, 85.3566107, 85.3576259, 85.3519618, 
+                  85.3512281, 85.3522836, 85.3565306, 85.3551952, 85.3549863, 85.3524398, 85.3502417, 
+                  85.3531312, 85.3524961, 85.3531877],
+    'LATITUDE': [27.7103062, 27.7086747, 27.7108716, 27.7090673, 27.7091368, 27.7054253, 27.7086372, 
+                 27.7076975, 27.7084029, 27.7090919, 27.707315, 27.7065477, 27.7079578, 27.707834, 
+                 27.7077806, 27.7115758, 27.7090448, 27.706558, 27.7058551, 27.7055133, 27.7078784, 
+                 27.7052758, 27.7059877, 27.7086342],
+    'dia_cm': [60, 60, 60, 60, 104, 97, 95, 54, 67, 42, 61, 108, 80, 66, 56, 30, 37, 103, 109, 65, 92, 52, 64, 70],
+    'height_m': [25, 25, 25, 25, 21, 27, 30, 28, 23, 21, 15, 16, 15, 26, 28, 26, 24, 18, 26, 15, 16, 29, 30, 22],
+    'class': [2, 2, 2, 2, 2, 1, 1, 3, 4, 1, 2, 2, 4, 1, 1, 3, 1, 1, 3, 3, 1, 2, 3, 4]
+}
 
+# Convert to DataFrame
+df = pd.DataFrame(data)
+
+# Display the DataFrame in Streamlit
+st.write("Tree Data:")
+st.dataframe(df)
+
+# Download button
+@st.cache_data
+def convert_df_to_csv(df):
+    return df.to_csv(index=False).encode('utf-8')
+
+csv_data = convert_df_to_csv(df)
+st.download_button(
+    label="Download Data as CSV",
+    data=csv_data,
+    file_name='tree_data_template.csv',
+    mime='text/csv'
+)
     # File uploader
     uploaded_file = st.file_uploader("निर्दिष्ठ प्रकारको रूखको तथ्याँङ्क तालीका .csv फर्म्याटको अपलोड गर्नुहोस।", type="csv")
 
