@@ -111,30 +111,12 @@ def main():
         pickable=True                       # Enable clicking on points
     )
 
-# end point costumization
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-sppVal = pd.DataFrame(data)
-joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
-# Copy the joined_df as 'result_df'
-result_df = joined_df.copy()
-""" यो एप्लिकेसन वन तथा वातावरण मंत्रालयको गाइडलाइन अनुसार तयार गरीएको छ। सावधानी अपनाएर मात्र प्रयोग गर्नुहोस। """
+    # end point costumization
+    sppVal = pd.DataFrame(data)
+    joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
+    # Copy the joined_df as 'result_df'
+    result_df = joined_df.copy()
+    """ यो एप्लिकेसन वन तथा वातावरण मंत्रालयको गाइडलाइन अनुसार तयार गरीएको छ। सावधानी अपनाएर मात्र प्रयोग गर्नुहोस। """
         def add_calculated_columns(df):
             df['stem_volume'] = np.exp(df['a'] + df['b'] * np.log(df['dia_cm']) + df['c'] * np.log(df['height_m'])) / 1000
             df['branch_ratio'] = df['dia_cm'].apply(lambda x: 0.1 if x < 10 else 0.2)
