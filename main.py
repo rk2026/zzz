@@ -8,7 +8,7 @@ def main():
     st.title("ट्री भोलुम क्यालकुलेटर (TVC 1.0)")
     
     # Define the downloading data as a user template.
-    data = {
+    tdata = {
         'TID': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
         'species': ['Row Labels', 'Abies spp', 'Acacia catechu', 'Adino cordifolia', 'Albizia spp', 
                     'Alnus nepalensis', 'Anogeissus latifolia', 'Bambax ceiba', 'Cedrela toona', 
@@ -30,21 +30,21 @@ def main():
     }
 
     # Convert to DataFrame
-    df = pd.DataFrame(data)
+    tdf = pd.DataFrame(tdata)
 
     # Display the DataFrame in Streamlit
     st.write("Tree Data:")
-    st.dataframe(df)
+    st.dataframe(tdf)
 
     # Download button
     @st.cache_data
-    def convert_df_to_csv(df):
-        return df.to_csv(index=False).encode('utf-8')
+    def convert_df_to_csv(tdf):
+        return tdf.to_csv(index=False).encode('utf-8')
 
-    csv_data = convert_df_to_csv(df)
+    csv_data = convert_df_to_csv(tdf)
     st.download_button(
         label="Download Data as CSV",
-        data=csv_data,
+        tdata=csv_data,
         file_name='tree_data_template.csv',
         mime='text/csv'
     )
