@@ -6,7 +6,6 @@ import numpy as np
 
 def main():
     '''#Download the templete'''
-    def main():
     st.title("ट्री भोलुम क्यालकुलेटर (TVC 1.0)")
     
     '''# Define the downloading data as a user template.'''
