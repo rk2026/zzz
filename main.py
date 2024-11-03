@@ -35,7 +35,7 @@ def main():
 
     # Display the DataFrame in Streamlit
     st.write("यो टेम्पेलट डाटा डाउनलोड गरी यही अनुसार हुनेगरी डाटा तयार गर्नुहोस, कृपया यस टेवलको कोलम हेडिङ्को नाम परिवर्तन नगर्नुहोस।(Download this templete to fill the data. Do not alter the column heading name)")
-    st.dataframe(tdf.hide_index())
+    st.dataframe(tdf)
 
     # Download button
     @st.cache_data
@@ -100,6 +100,35 @@ def main():
         if 'LATITUDE' in df.columns and 'LONGITUDE' in df.columns:
             st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
             st.map(df[['LATITUDE', 'LONGITUDE']])  # Display map with points
+#point costumization
+    # Define a pydeck Layer
+    layer = pdk.Layer(
+        'ScatterplotLayer',                 # Scatterplot layer for points
+        data=df,                            # Pass in the DataFrame
+        get_position='[LONGITUDE, LATITUDE]',
+        get_color='[200, 30, 0, 160]',      # Red color with some transparency
+        get_radius=1000,                    # Point size
+        pickable=True                       # Enable clicking on points
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
 
         sppVal = pd.DataFrame(data)
 
