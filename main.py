@@ -96,7 +96,7 @@ def main():
         }
 
         if 'LATITUDE' in df.columns and 'LONGITUDE' in df.columns:
-        st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
+            st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
             
         # Start point customization
         layer = pdk.Layer(
