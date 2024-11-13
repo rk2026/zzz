@@ -95,21 +95,34 @@ def main():
                            'Hill spp', '', '']
         }
 
+        
+# Assuming df is your DataFrame and it has 'LATITUDE' and 'LONGITUDE' columns
         if 'LATITUDE' in df.columns and 'LONGITUDE' in df.columns:
             st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
-            
-        # Start point customization
-        layer = pdk.Layer(
-            'ScatterplotLayer',
-            data=df,
-            get_position='[LONGITUDE, LATITUDE]',
-            get_color='[100, 30, 0, 230]',
-            get_radius=1,
-            pickable=True
-        )
-        st.map(df[['LATITUDE', 'LONGITUDE']])  # Display map with points
-        sppVal = pd.DataFrame(data)
-        joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
+        
+            # Define the point size
+            point_size = 5  # You can change this value to adjust the size of the points
+        
+            # Start point customization
+            layer = pdk.Layer(
+                'ScatterplotLayer',
+                data=df,
+                get_position='[LONGITUDE, LATITUDE]',
+                get_color='[100, 30, 0, 230]',
+                get_radius=point_size,  # Use the point_size variable here
+                pickable=True
+            )
+        
+            # Create a deck.gl map
+            view_state = pdk.ViewState(
+                latitude=df['LATITUDE'].mean(),
+                longitude=df['LONGITUDE'].mean(),
+                zoom=10
+            )
+        
+            # Render the map
+            r = pdk.Deck(layers=[layer], initial_view_state=view_state)
+            st.pydeck_chart(r)
         '''if 'LATITUDE' in df.columns and 'LONGITUDE' in df.columns:
             st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
             
