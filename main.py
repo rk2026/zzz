@@ -101,14 +101,14 @@ def main():
             st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
         
             # Define the point size
-            point_size = 5  # You can change this value to adjust the size of the points
+            point_size = 2  # You can change this value to adjust the size of the points
         
             # Start point customization
             layer = pdk.Layer(
                 'ScatterplotLayer',
                 data=df,
                 get_position='[LONGITUDE, LATITUDE]',
-                get_color='[100, 30, 0, 230]',
+                get_color='[220, 30, 0, 230]',
                 get_radius=point_size,  # Use the point_size variable here
                 pickable=True
             )
