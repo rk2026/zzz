@@ -103,8 +103,8 @@ def main():
             'ScatterplotLayer',
             data=df,
             get_position='[LONGITUDE, LATITUDE]',
-            get_color='[200, 30, 0, 160]',
-            get_radius=10,
+            get_color='[100, 30, 0, 230]',
+            get_radius=1,
             pickable=True
         )
         st.map(df[['LATITUDE', 'LONGITUDE']])  # Display map with points
