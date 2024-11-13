@@ -96,7 +96,7 @@ def main():
         }
 
         if 'LATITUDE' in df.columns and 'LONGITUDE' in df.columns:
-            st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
+        st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
             
         # Start point customization
         layer = pdk.Layer(
@@ -108,6 +108,21 @@ def main():
             pickable=True
         )
         st.map(df[['LATITUDE', 'LONGITUDE']])  # Display map with points
+        sppVal = pd.DataFrame(data)
+        joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
+        '''if 'LATITUDE' in df.columns and 'LONGITUDE' in df.columns:
+            st.subheader("स्थानहरू नक्सामा हेर्नुहोस्:")
+            
+        # Start point customization
+        layer = pdk.Layer(
+            'ScatterplotLayer',
+            data=df,
+            get_position='[LONGITUDE, LATITUDE]',
+            get_color='[100, 30, 0, 230]',
+            get_radius=1,
+            pickable=True
+        )
+        st.map(df[['LATITUDE', 'LONGITUDE']])  # Display map with points'''
         sppVal = pd.DataFrame(data)
         joined_df = df.merge(sppVal, left_on='species', right_on='scientific_name')
 
