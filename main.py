@@ -2,6 +2,13 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import pydeck as pdk
+import io
+import geopandas as gpd
+import pyproj
+from shapely.geometry import Point, Polygon, box
+from shapely.ops import nearest_points
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 def main():
     '''# Download the template'''
@@ -142,12 +149,103 @@ def main():
             return df
 
         result_df = add_calculated_columns(joined_df)
+        geometry = [Point(xy) for xy in zip(stemmapping_df['LONGITUDE'], stemmapping_df['LATITUDE'])]
         columns_to_drop = ['SN', 'scientific_name', 'a', 'b', 'c', 'a1', 'b1', 's', 'm', 'bg']
-        result_df = result_df.drop(columns=columns_to_drop)
+        result_gdf = gpd.GeoDataFrame(result_df, geometry=geometry)
+        result_gdf = result_df.drop(columns=columns_to_drop)
+        result_gdf = result_gdf.copy()
+        # Assuming 'result_gdf' is your GeoDataFrame
+        minx, miny, maxx, maxy = result_gdf.total_bounds
+        bounding_polygon = Polygon([(minx, miny), (maxx, miny), (maxx, maxy), (minx, maxy)])
+        bounding_gdf = gpd.GeoDataFrame(geometry=[bounding_polygon], crs=result_gdf.crs)
+        bounding_gdf = bounding_gdf.set_crs("EPSG:4326")
+        result_gdf = result_gdf.set_crs("EPSG:4326")
+        # Assuming 'bounding_gdf' is your GeoDataFrame in 'EPSG:4326'
 
+        # Define the grid spacing in meters (20 meters in this case)
+        spacing_meters = grid_spacing
+        # Get the bounds of the bounding geometry
+        xmin, ymin, xmax, ymax = bounding_gdf.total_bounds
+        # Calculate spacing in degrees based on the center of the bounding box
+        center_lat = (ymin + ymax) / 2
+        spacing_degrees = spacing_meters / (111320 * np.cos(np.radians(center_lat)))  # Approximate conversion
+        # Create a list of x and y coordinates for the grid points
+        x_coords = []
+        current_x = xmin
+        while current_x < xmax:
+            x_coords.append(current_x)
+            current_x += spacing_degrees
+        
+        y_coords = []
+        current_y = ymin
+        while current_y < ymax:
+            y_coords.append(current_y)
+            current_y += spacing_degrees
+        
+        # Create a list of polygons representing the grid cells
+        polygons = []
+        for x in x_coords:
+            for y in y_coords:
+                polygons.append(Polygon([(x, y), (x + spacing_degrees, y),
+                                         (x + spacing_degrees, y + spacing_degrees), (x, y + spacing_degrees)]))
+        
+        # Create a GeoDataFrame from the polygons
+        grid_gdf = gpd.GeoDataFrame({'geometry': polygons}, crs='EPSG:4326')
+        
+        # (Optional) Clip the grid to the bounding geometry
+        grid_gdf = gpd.clip(grid_gdf, bounding_gdf)
+        grid_gdf = grid_gdf.set_crs("EPSG:4326")
+        # Select polygons from grid_gdf that intersect with result_gdf
+        selected_polygons = grid_gdf[grid_gdf.intersects(result_gdf.unary_union)]
+        
+        # Create centroid_gdf from the selected polygons
+        centroid_gdf = selected_polygons.copy()
+        centroid_gdf['geometry'] = selected_polygons['geometry'].centroid
+        # Use allow_override=True to replace the existing CRS without transformation
+        result_gdf = result_gdf.set_crs("EPSG:32645", allow_override=True)
+        centroid_gdf = centroid_gdf.set_crs("EPSG:32645", allow_override=True)
+        # Create a new column 'remark' in result_gdf, initializing all values to 'Felling Tree'
+        result_gdf['remark'] = 'Felling Tree'
+        
+        # Iterate through each centroid in centroid_gdf
+        for index, centroid_row in centroid_gdf.iterrows():
+            centroid_point = centroid_row['geometry']
+        
+            # Find the nearest point in result_gdf to the current centroid
+            # Replaced 'unary_union' with 'union_all()' to address the deprecation warning
+            nearest_geoms = nearest_points(centroid_point, result_gdf.geometry.union_all())  
+            nearest_point_in_result = nearest_geoms[1]  # The second point is from result_gdf
+        
+            # Find the index of the nearest point in result_gdf
+            nearest_index = result_gdf[result_gdf['geometry'] == nearest_point_in_result].index[0]
+        
+            # Update the 'remark' column for the nearest point
+            result_gdf.loc[nearest_index, 'remark'] = 'Mother Tree'        
+
+
+        result_gdf =result_gdf.copy()
+        nearest_points_gdf = gpd.sjoin_nearest(centroid_gdf, result_gdf, how='left', distance_col='distance')
+        # Assuming result_gdf is your GeoDataFrame with the 'remark' column
+
+        # Calculate counts for each category
+        mother_tree_count = result_gdf[result_gdf['remark'] == 'Mother Tree'].shape[0]
+        felling_tree_count = result_gdf[result_gdf['remark'] == 'Felling Tree'].shape[0]
+        
+        # Create custom legend handles with counts
+        red_patch = mpatches.Patch(color='red', label=f'Felling Tree: {felling_tree_count}')
+        blue_patch = mpatches.Patch(color='blue', label=f'Mother Tree: {mother_tree_count}')
+        
+        # Plot the GeoDataFrame with custom legend
+        fig, ax = plt.subplots(figsize=(10, 10))  # Adjust figure size as needed
+        result_gdf.plot(column='remark', cmap='RdBu', legend=True, ax=ax)
+        
+        # Replace the default legend with the custom legend
+        ax.legend(handles=[red_patch, blue_patch])
+        
+        plt.show()
         # Display the updated dataframe
         st.write("तलको विश्लेषण तालीका excel csv को रूपमा डाउनलोड गर्नुहोस:")
-        st.dataframe(result_df)
+        st.dataframe(result_gdf)
 
 if __name__ == "__main__":
     main()
