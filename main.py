@@ -223,13 +223,13 @@ def main():
             result_gdf.loc[nearest_index, 'remark'] = 'Mother Tree'        
 
 
-        result_gdf =result_gdf.copy()
-        nearest_points_gdf = gpd.sjoin_nearest(centroid_gdf, result_gdf, how='left', distance_col='distance')
+        result_gdf1 =result_gdf.copy()
+        nearest_points_gdf = gpd.sjoin_nearest(centroid_gdf, result_gdf1, how='left', distance_col='distance')
         # Assuming result_gdf is your GeoDataFrame with the 'remark' column
 
         # Calculate counts for each category
-        mother_tree_count = result_gdf[result_gdf['remark'] == 'Mother Tree'].shape[0]
-        felling_tree_count = result_gdf[result_gdf['remark'] == 'Felling Tree'].shape[0]
+        mother_tree_count = result_gdf1[result_gdf1['remark'] == 'Mother Tree'].shape[0]
+        felling_tree_count = result_gdf1[result_gdf['remark'] == 'Felling Tree'].shape[0]
         
         # Create custom legend handles with counts
         red_patch = mpatches.Patch(color='red', label=f'Felling Tree: {felling_tree_count}')
@@ -237,7 +237,7 @@ def main():
         
         # Plot the GeoDataFrame with custom legend
         fig, ax = plt.subplots(figsize=(10, 10))  # Adjust figure size as needed
-        result_gdf.plot(column='remark', cmap='RdBu', legend=True, ax=ax)
+        result_gdf1.plot(column='remark', cmap='RdBu', legend=True, ax=ax)
         
         # Replace the default legend with the custom legend
         ax.legend(handles=[red_patch, blue_patch])
@@ -245,7 +245,7 @@ def main():
         plt.show()
         # Display the updated dataframe
         st.write("तलको विश्लेषण तालीका excel csv को रूपमा डाउनलोड गर्नुहोस:")
-        st.dataframe(result_gdf)
+        st.dataframe(result_gdf1)
 
 if __name__ == "__main__":
     main()
