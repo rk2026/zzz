@@ -7,7 +7,7 @@ def main():
     '''# Download the template'''
     st.title("ट्री भोलुम क्यालकुलेटर (TVC 1.0)")
     
-    '''# Download template file. '''
+    '''# Download template file.'''
     tdata = {
         'TID': [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
         'species': ['Row Labels', 'Abies spp', 'Acacia catechu', 'Adino cordifolia', 'Albizia spp', 
